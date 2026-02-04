@@ -1,0 +1,53 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pão da Roça - Produtos Caseiros</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Lora:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #FCF8F3;
+            --primary-amber: #78350f;
+            --accent-red: #991b1b; /* Tom do laço da mascote */
+        }
+        body {
+            font-family: 'Lora', serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(circle at 50% 10%, rgba(251, 146, 60, 0.05) 0%, transparent 50%);
+            background-attachment: fixed;
+        }
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+        }
+        ::selection {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #fff;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #78350f;
+            border-radius: 4px;
+        }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "react": "https://esm.sh/react@^19.2.4"
+  }
+}
+</script>
+</head>
+<body class="text-stone-900 antialiased">
+    <div id="root"></div>
+</body>
+</html>

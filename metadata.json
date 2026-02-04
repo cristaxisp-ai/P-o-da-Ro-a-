@@ -1,0 +1,5 @@
+{
+  "name": "Pão da Roça",
+  "description": "Um aplicativo simples e rústico para encomenda de pães e doces caseiros com entrega combinada via WhatsApp.",
+  "requestFramePermissions": []
+}
