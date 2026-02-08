@@ -69,6 +69,20 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, quantities, onUpdate
         />
         
         <div className="absolute top-2 left-2 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition-opacity">
+          {/* Botão Compartilhar (Abre Editor de Imagem) */}
+          {onEditImage && (
+            <button 
+              onClick={() => onEditImage(product.imageUrl)}
+              className="p-2 bg-white/70 backdrop-blur-md text-green-700 rounded-lg shadow-sm border border-white/50 hover:bg-green-600 hover:text-white transition-colors flex items-center space-x-1"
+              title="Compartilhar (Editar com IA)"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+              </svg>
+              <span className="text-[10px] font-bold">Compartilhar</span>
+            </button>
+          )}
+
           {/* Botão de Edição Rápida IA */}
           {onEditImage && (
             <button 
