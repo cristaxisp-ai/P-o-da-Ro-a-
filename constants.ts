@@ -22,8 +22,8 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 'pudim-fazenda',
-    name: 'Pudim de Leite da Fazenda',
-    description: 'Receita de família com textura aveludada e calda de caramelo artesanal.',
+    name: 'Pudim de Leite Condensado',
+    description: 'Receita clássica com textura aveludada e calda de caramelo artesanal.',
     price: 25.00,
     category: 'Sobremesas',
     imageUrl: 'https://images.unsplash.com/photo-1528975604071-b4dc52a2d18c?q=80&w=600&auto=format&fit=crop'
