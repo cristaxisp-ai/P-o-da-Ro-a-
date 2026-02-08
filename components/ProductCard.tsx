@@ -6,9 +6,11 @@ interface ProductCardProps {
   product: Product;
   quantities: Record<string, number>;
   onUpdateQuantity: (id: string, delta: number) => void;
+  onEditImage?: (imageUrl: string) => void;
+  onEditProduct?: (product: Product) => void;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product, quantities, onUpdateQuantity }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ product, quantities, onUpdateQuantity, onEditImage, onEditProduct }) => {
   const [imgSrc, setImgSrc] = useState(product.imageUrl);
   const [hasError, setHasError] = useState(false);
 
@@ -57,14 +59,43 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, quantities, onUpdate
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-orange-100 overflow-hidden transition-all hover:shadow-md flex flex-col h-full">
+    <div className="group bg-white rounded-xl shadow-sm border border-orange-100 overflow-hidden transition-all hover:shadow-md flex flex-col h-full">
       <div className="relative h-48 w-full overflow-hidden bg-stone-100">
         <img 
-          src={imgSrc} 
+          src={product.imageUrl} 
           alt={product.name}
-          className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           onError={handleImageError}
         />
+        
+        <div className="absolute top-2 left-2 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition-opacity">
+          {/* Botão de Edição Rápida IA */}
+          {onEditImage && (
+            <button 
+              onClick={() => onEditImage(product.imageUrl)}
+              className="p-2 bg-white/70 backdrop-blur-md text-amber-900 rounded-lg shadow-sm border border-white/50 hover:bg-orange-600 hover:text-white transition-colors"
+              title="Melhorar foto com IA"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </button>
+          )}
+
+          {/* Botão de Editar Dados do Produto */}
+          {onEditProduct && (
+            <button 
+              onClick={() => onEditProduct(product)}
+              className="p-2 bg-white/70 backdrop-blur-md text-amber-900 rounded-lg shadow-sm border border-white/50 hover:bg-amber-900 hover:text-white transition-colors"
+              title="Editar informações do produto"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+              </svg>
+            </button>
+          )}
+        </div>
+
         {!product.variants && (
           <div className="absolute top-2 right-2 bg-amber-700 text-white px-3 py-1 rounded-full text-sm font-bold shadow-sm">
             R$ {product.price.toFixed(2).replace('.', ',')}
