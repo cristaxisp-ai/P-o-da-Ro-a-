@@ -6,10 +6,11 @@ interface AddProductModalProps {
   isOpen: boolean;
   onClose: () => void;
   onAdd: (product: Product) => void;
+  onDelete?: (productId: string) => void;
   editProduct?: Product | null;
 }
 
-const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose, onAdd, editProduct }) => {
+const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose, onAdd, onDelete, editProduct }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
@@ -21,7 +22,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose, onAd
     if (editProduct) {
       setName(editProduct.name);
       setDescription(editProduct.description);
-      setPrice(editProduct.price.toString().replace('.', ','));
+      setPrice(editProduct.price.toFixed(2).replace('.', ','));
       setCategory(editProduct.category);
       setImage(editProduct.imageUrl);
     } else {
@@ -145,12 +146,23 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose, onAd
             </div>
           </div>
 
-          <button 
-            type="submit"
-            className="w-full bg-amber-950 hover:bg-amber-900 text-white font-black py-4 rounded-2xl shadow-lg transition-all active:scale-[0.98] mt-4"
-          >
-            {editProduct ? 'SALVAR ALTERAÇÕES' : 'ADICIONAR AO CARDÁPIO'}
-          </button>
+          <div className="flex space-x-3 pt-4">
+            {editProduct && onDelete && (
+              <button 
+                type="button"
+                onClick={() => onDelete(editProduct.id)}
+                className="flex-1 bg-red-50 text-red-600 border border-red-200 font-bold py-4 rounded-2xl hover:bg-red-100 transition-colors active:scale-[0.98]"
+              >
+                EXCLUIR
+              </button>
+            )}
+            <button 
+              type="submit"
+              className={`flex-[2] bg-amber-950 hover:bg-amber-900 text-white font-black py-4 rounded-2xl shadow-lg transition-all active:scale-[0.98]`}
+            >
+              {editProduct ? 'SALVAR ALTERAÇÕES' : 'ADICIONAR AO CARDÁPIO'}
+            </button>
+          </div>
         </form>
       </div>
     </div>

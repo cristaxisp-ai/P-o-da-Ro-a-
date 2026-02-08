@@ -68,6 +68,21 @@ const App: React.FC = () => {
     setProductToEdit(null);
   };
 
+  const handleDeleteProduct = (productId: string) => {
+    if (window.confirm("Tem certeza que deseja remover este item do cardápio?")) {
+      setLocalProducts(prev => prev.filter(p => p.id !== productId));
+      setProductToEdit(null);
+      setIsAddProductOpen(false);
+    }
+  };
+
+  const handleResetCatalog = () => {
+    if (window.confirm("Deseja resetar o cardápio para os produtos originais? Isso apagará suas edições personalizadas.")) {
+      localStorage.removeItem(STORAGE_KEY_PRODUCTS);
+      setLocalProducts(PRODUCTS);
+    }
+  };
+
   const handleCloseAddModal = () => {
     setIsAddProductOpen(false);
     setProductToEdit(null);
@@ -120,6 +135,7 @@ const App: React.FC = () => {
       <Header 
         onOpenEditor={() => handleOpenEditor()} 
         onOpenAddProduct={() => setIsAddProductOpen(true)}
+        onResetCatalog={handleResetCatalog}
       />
       
       <main className="flex-grow container mx-auto px-4 py-8 max-w-5xl">
@@ -172,6 +188,7 @@ const App: React.FC = () => {
         isOpen={isAddProductOpen} 
         onClose={handleCloseAddModal}
         onAdd={handleAddOrUpdateProduct}
+        onDelete={handleDeleteProduct}
         editProduct={productToEdit}
       />
     </div>

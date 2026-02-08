@@ -4,9 +4,10 @@ import React from 'react';
 interface HeaderProps {
   onOpenEditor: () => void;
   onOpenAddProduct: () => void;
+  onResetCatalog?: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ onOpenEditor, onOpenAddProduct }) => {
+const Header: React.FC<HeaderProps> = ({ onOpenEditor, onOpenAddProduct, onResetCatalog }) => {
   return (
     <header className="relative w-full flex flex-col items-center justify-center pt-12 pb-8 px-4 overflow-hidden">
       {/* Decoração de fundo sutil - Brilho de forno a lenha */}
@@ -18,6 +19,17 @@ const Header: React.FC<HeaderProps> = ({ onOpenEditor, onOpenAddProduct }) => {
           
           {/* Ações do Header */}
           <div className="absolute -top-4 -right-4 flex space-x-2">
+            {/* Botão de Resetar (Apenas Admin/Contexto de edição) */}
+            {onResetCatalog && (
+              <button 
+                onClick={onResetCatalog}
+                className="w-10 h-10 bg-white text-amber-900 rounded-full shadow-md hover:bg-stone-100 hover:scale-110 active:scale-95 transition-all flex items-center justify-center border-2 border-amber-900/10 group"
+                title="Resetar para o Padrão"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+              </button>
+            )}
+
             {/* Botão de Adicionar Produto */}
             <button 
               onClick={onOpenAddProduct}
@@ -49,16 +61,11 @@ const Header: React.FC<HeaderProps> = ({ onOpenEditor, onOpenAddProduct }) => {
           {/* Mascote Pão da Roça */}
           <div className="w-28 h-28 md:w-36 md:h-36 flex-shrink-0 relative group">
             <div className="absolute inset-0 bg-orange-300 rounded-full blur-2xl opacity-20 group-hover:opacity-40 transition-opacity animate-pulse"></div>
-            {/* 
-                Nota: Substitua o src abaixo pela imagem real se estiver hospedada, 
-                ou mantenha para carregar a mascote ilustrativa.
-            */}
             <img 
               src="https://raw.githubusercontent.com/lucas-labs/assets/main/pao-da-roca-mascot.png" 
               alt="Mascote Pão da Roça" 
               className="w-full h-full object-contain relative z-10 drop-shadow-2xl transform group-hover:scale-110 transition-transform duration-300"
               onError={(e) => {
-                // Fallback para um ícone rústico se a imagem não carregar
                 e.currentTarget.src = "https://img.icons8.com/color/512/bakery.png";
               }}
             />
