@@ -1,144 +1,70 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Product } from '../types';
 
 interface ProductCardProps {
   product: Product;
-  quantities: Record<string, number>;
+  quantity: number;
   onUpdateQuantity: (id: string, delta: number) => void;
-  onEditImage?: (imageUrl: string) => void;
-  onEditProduct?: (product: Product) => void;
+  onEdit: () => void;
+  onDelete: () => void;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product, quantities, onUpdateQuantity, onEditImage, onEditProduct }) => {
-  const [imgSrc, setImgSrc] = useState(product.imageUrl);
-  const [hasError, setHasError] = useState(false);
-
-  const handleImageError = () => {
-    if (!hasError) {
-      setHasError(true);
-      setImgSrc(`https://placehold.co/600x400/fef3c7/78350f?text=${encodeURIComponent(product.name)}`);
-    }
-  };
-
-  const renderQuantityControl = (id: string, label?: string, price?: number) => {
-    const qty = quantities[id] || 0;
-    return (
-      <div className="flex items-center justify-between w-full mt-2">
-        <div className="flex items-center space-x-2">
-          {label && (
-            <span className="w-8 h-8 flex items-center justify-center bg-amber-900 text-white rounded-full font-bold text-xs shadow-sm">
-              {label}
-            </span>
-          )}
-          {price !== undefined && (
-            <span className="text-sm font-semibold text-amber-900/70">
-              R$ {price.toFixed(2).replace('.', ',')}
-            </span>
-          )}
-        </div>
-        
-        <div className="flex items-center space-x-3 bg-stone-50 rounded-lg border border-stone-200 p-1">
-          <button 
-            onClick={() => onUpdateQuantity(id, -1)}
-            className="w-8 h-8 flex items-center justify-center rounded-md bg-white border border-stone-300 text-amber-900 hover:bg-orange-50 active:scale-95 transition-all disabled:opacity-50"
-            disabled={qty === 0}
-          >
-            -
-          </button>
-          <span className="w-6 text-center font-bold text-amber-950">{qty}</span>
-          <button 
-            onClick={() => onUpdateQuantity(id, 1)}
-            className="w-8 h-8 flex items-center justify-center rounded-md bg-white border border-stone-300 text-amber-900 hover:bg-orange-50 active:scale-95 transition-all"
-          >
-            +
-          </button>
-        </div>
-      </div>
-    );
-  };
-
+const ProductCard: React.FC<ProductCardProps> = ({ product, quantity, onUpdateQuantity, onEdit, onDelete }) => {
   return (
-    <div className="group bg-white rounded-xl shadow-sm border border-orange-100 overflow-hidden transition-all hover:shadow-md flex flex-col h-full">
-      <div className="relative h-48 w-full overflow-hidden bg-stone-100">
+    <div className="bg-white rounded-2xl shadow-sm border border-stone-100 overflow-hidden flex flex-col h-full hover:shadow-md transition-shadow group relative">
+      <div className="relative h-48 w-full">
         <img 
           src={product.imageUrl} 
           alt={product.name}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          onError={handleImageError}
+          className="w-full h-full object-cover"
         />
-        
-        <div className="absolute top-2 left-2 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition-opacity">
-          {/* Botão Compartilhar (Abre Editor de Imagem) */}
-          {onEditImage && (
-            <button 
-              onClick={() => onEditImage(product.imageUrl)}
-              className="p-2 bg-white/70 backdrop-blur-md text-green-700 rounded-lg shadow-sm border border-white/50 hover:bg-green-600 hover:text-white transition-colors flex items-center space-x-1"
-              title="Compartilhar (Editar com IA)"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-              </svg>
-              <span className="text-[10px] font-bold">Compartilhar</span>
-            </button>
-          )}
-
-          {/* Botão de Edição Rápida IA */}
-          {onEditImage && (
-            <button 
-              onClick={() => onEditImage(product.imageUrl)}
-              className="p-2 bg-white/70 backdrop-blur-md text-amber-900 rounded-lg shadow-sm border border-white/50 hover:bg-orange-600 hover:text-white transition-colors"
-              title="Melhorar foto com IA"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-            </button>
-          )}
-
-          {/* Botão de Editar Dados do Produto */}
-          {onEditProduct && (
-            <button 
-              onClick={() => onEditProduct(product)}
-              className="p-2 bg-white/70 backdrop-blur-md text-amber-900 rounded-lg shadow-sm border border-white/50 hover:bg-amber-900 hover:text-white transition-colors"
-              title="Editar informações do produto"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-              </svg>
-            </button>
-          )}
+        <div className="absolute top-3 right-3 bg-amber-900 text-white px-3 py-1 rounded-full text-sm font-bold shadow-md">
+          R$ {product.price.toFixed(2).replace('.', ',')}
         </div>
-
-        {!product.variants && (
-          <div className="absolute top-2 right-2 bg-amber-700 text-white px-3 py-1 rounded-full text-sm font-bold shadow-sm">
-            R$ {product.price.toFixed(2).replace('.', ',')}
-          </div>
-        )}
+        
+        {/* Controles Administrativos (Aparecem no Hover) */}
+        <div className="absolute top-3 left-3 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
+          <button 
+            onClick={(e) => { e.stopPropagation(); onEdit(); }}
+            className="p-2 bg-white/90 backdrop-blur-sm rounded-lg text-amber-900 shadow-sm hover:bg-amber-950 hover:text-white transition-all"
+            title="Editar produto"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+          </button>
+          <button 
+            onClick={(e) => { e.stopPropagation(); onDelete(); }}
+            className="p-2 bg-white/90 backdrop-blur-sm rounded-lg text-red-600 shadow-sm hover:bg-red-600 hover:text-white transition-all"
+            title="Excluir produto"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+          </button>
+        </div>
       </div>
       
-      <div className="p-4 flex-grow flex flex-col">
-        <h3 className="text-xl font-bold text-amber-950 mb-1">{product.name}</h3>
-        <p className="text-stone-600 text-sm mb-4 flex-grow italic">
-          {product.description}
+      <div className="p-5 flex-grow flex flex-col">
+        <h3 className="text-xl font-bold text-amber-950 mb-2 leading-tight">{product.name}</h3>
+        <p className="text-stone-600 text-sm mb-6 flex-grow leading-relaxed italic">
+          {product.description || "Sem descrição disponível."}
         </p>
         
-        <div className="mt-auto space-y-2">
-          <div className="mb-2">
-            <span className="text-[10px] uppercase tracking-wider text-amber-800/60 font-bold">{product.category}</span>
+        <div className="flex items-center justify-between mt-auto">
+          <div className="flex items-center space-x-3 bg-stone-50 rounded-xl p-1 border border-stone-200">
+            <button 
+              onClick={() => onUpdateQuantity(product.id, -1)}
+              className="w-10 h-10 flex items-center justify-center rounded-lg bg-white border border-stone-200 text-amber-900 hover:bg-orange-50 active:scale-90 transition-all disabled:opacity-30 shadow-sm"
+              disabled={quantity === 0}
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 12H4" /></svg>
+            </button>
+            <span className="w-6 text-center font-black text-amber-950 text-lg">{quantity}</span>
+            <button 
+              onClick={() => onUpdateQuantity(product.id, 1)}
+              className="w-10 h-10 flex items-center justify-center rounded-lg bg-white border border-stone-200 text-amber-900 hover:bg-orange-50 active:scale-90 transition-all shadow-sm"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" /></svg>
+            </button>
           </div>
-          
-          {product.variants ? (
-            <div className="flex flex-col space-y-3">
-              {product.variants.map(variant => (
-                <React.Fragment key={variant.id}>
-                  {renderQuantityControl(variant.id, variant.label, variant.price)}
-                </React.Fragment>
-              ))}
-            </div>
-          ) : (
-            renderQuantityControl(product.id)
-          )}
         </div>
       </div>
     </div>
